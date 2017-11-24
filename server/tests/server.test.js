@@ -160,31 +160,23 @@ describe('PATCH /todos/:id', () => {
     })
     .end(done);
   });
+
   it('should clear completedAt when todo is not completed', (done) => {
-    // grab id of second todo item
     var hexId = todos[1]._id.toHexString();
-    // update text, set completed to false
-    var body = {
-      text: 'uusi teksti',
-      completed: false,
-      completedAt: null
-    }
+    var text = 'uusi teksti!!';
 
     request(app)
     .patch(`/todos/${hexId}`)
-    .send(body)
-    // text is changed, completed false, completedAt null
-    .expect(200)
+    .send({
+      completed: false,
+      text
+    })
+    .expect(200) // 200
     .expect((res) => {
-      expect(res.body.todo.text).toBe('uusi teksti');
+      expect(res.body.todo.text).toBe(text);
       expect(res.body.todo.completed).toBe(false);
       expect(res.body.todo.completedAt).toNotExist();
     })
-    .end((err, res) => {
-      if (err) {
-        return done(err);
-      }
-      done();
-    });
+    .end(done);
   });
 });
