@@ -111,49 +111,18 @@ app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
-// POST /users/login
+
 app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
 
   User.findByCredentials(body.email, body.password).then((user) => {
     user.generateAuthToken().then((token) => {
-      res.header('x-auth', token).send(user); 
+      res.header('x-auth', token).send(user);
     });
   }).catch((e) => {
     res.status(400).send();
   });
 });
-
-
-  // .send({email, password})
-  //
-  // var user = new User(body);
-  //
-  // User.findOne({email}).then((user) => {
-  // if (!user) {
-  //   return res.status(404).send();
-  // }
-  //   return res.send({user});
-  //   bcrypt.compare(body.password, user.password, (err, res) => {
-  //   if (res === true) {
-  //     return user.password;
-  //   }
-  // }).catch((e) => {
-  //   res.status(400).user();
-  // });
-
-  // bcrypt.genSalt(10, (err, salt) => {
-  //   bcrypt.hash(password, salt, (err, hash) => {
-  //     console.log(hash);
-  //   });
-  // });
-  // });
-
-  // User.findOne({email}).then((user) => {
-  //   expect(user).toExist();
-  //   expect(user.password).toNotBe(password);
-  //   done();
-  // });
 
 app.listen(port, () => {
   console.log(`Started up at port ${port}`);
